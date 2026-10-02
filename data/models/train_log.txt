@@ -1,0 +1,37 @@
+positions with features: 19968  (dataset has 20061)
+responding neurons: 4930 (all) / 2611 (downstream only) of 138639
+random legal move baseline: top1=8.9%
+Training no-brain baseline (raw board one-hot -> moves)
+  [board] epoch   5 loss=2.184 val top1=24.2% top3=45.5%
+  [board] epoch  10 loss=1.583 val top1=25.2% top3=46.4%
+  [board] epoch  15 loss=1.510 val top1=25.3% top3=47.2%
+  [board] epoch  20 loss=1.621 val top1=25.6% top3=47.9%
+  [board] epoch  25 loss=1.462 val top1=25.5% top3=47.7%
+  [board] epoch  30 loss=1.082 val top1=25.6% top3=47.9%
+  [board] epoch  35 loss=1.064 val top1=25.5% top3=47.9%
+  [board] epoch  40 loss=1.232 val top1=25.5% top3=47.9%
+Training fly-brain readout on downstream neurons (2611 features)
+  [fly-downstream] epoch   5 loss=0.648 val top1=19.4% top3=38.3%
+  [fly-downstream] epoch  10 loss=0.242 val top1=20.3% top3=39.6%
+  [fly-downstream] epoch  15 loss=0.153 val top1=20.4% top3=39.7%
+  [fly-downstream] epoch  20 loss=0.177 val top1=20.6% top3=39.8%
+  [fly-downstream] epoch  25 loss=0.102 val top1=20.3% top3=39.7%
+  [fly-downstream] epoch  30 loss=0.088 val top1=20.3% top3=39.3%
+  [fly-downstream] epoch  35 loss=0.093 val top1=20.6% top3=39.5%
+  [fly-downstream] epoch  40 loss=0.077 val top1=20.6% top3=39.6%
+Training fly-brain readout on all neurons (4930 features)
+  [fly-all] epoch   5 loss=0.279 val top1=23.2% top3=46.3%
+  [fly-all] epoch  10 loss=0.104 val top1=23.7% top3=45.4%
+  [fly-all] epoch  15 loss=0.198 val top1=22.9% top3=45.7%
+  [fly-all] epoch  20 loss=0.088 val top1=23.9% top3=44.4%
+  [fly-all] epoch  25 loss=0.091 val top1=23.2% top3=44.8%
+  [fly-all] epoch  30 loss=0.043 val top1=23.3% top3=44.8%
+  [fly-all] epoch  35 loss=0.053 val top1=23.0% top3=45.0%
+  [fly-all] epoch  40 loss=0.065 val top1=23.2% top3=45.0%
+
+RESULTS on 1996 held-out positions (agreement with Stockfish depth-10 best move)
+  random legal move            : top1=  8.9%
+  board one-hot (no brain)     : top1= 25.8%  top3= 47.7%
+  fly brain, downstream neurons: top1= 21.2%  top3= 39.4%  (2611 neurons)
+  fly brain, all        neurons: top1= 24.5%  top3= 44.7%  (4930 neurons)
+saved -> /Users/swapnil/DATA/FLY/data/models

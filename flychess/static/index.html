@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>flychess</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="fly">🪰</span>
+    <div>
+      <h1>flychess</h1>
+      <p class="sub">A whole fruit-fly brain, <span id="n-neurons">138,639</span> neurons, deciding chess moves</p>
+    </div>
+  </div>
+  <div class="controls">
+    <label>You play
+      <select id="color"><option value="w">White</option><option value="b">Black</option></select>
+    </label>
+    <label>Readout
+      <select id="variant">
+        <option value="downstream">downstream neurons</option>
+        <option value="all">all responding neurons</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="norep" checked> avoid repetition</label>
+    <button id="new">New game</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel board-panel">
+    <div class="board-wrap">
+      <div id="board"></div>
+      <svg id="arrows" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="status" id="status">Your move.</div>
+    <ol class="moves" id="moves"></ol>
+  </section>
+
+  <section class="panel brain-panel">
+    <div class="panel-head">
+      <h2>The fly's brain <span class="muted">138,639 neurons at their real positions · spikes stream live while the simulation runs · drag to orbit, scroll to zoom, double-click to reset</span></h2>
+      <div class="legend">
+        <span><i class="dot in"></i>visual input</span>
+        <span><i class="dot br"></i>brain</span>
+        <span><i class="dot dn"></i>descending</span>
+      </div>
+    </div>
+    <div id="brain3d"><div class="loading" id="brain-loading">Loading 138,639 neurons…</div><div class="inset-frame"><span>the fly</span></div></div>
+    <div class="timeline"><div class="tl-fill" id="tl"></div><span id="tl-label">0 ms</span></div>
+    <div class="stats">
+      <div><b id="s-driven">–</b><span>input neurons driven</span></div>
+      <div><b id="s-neurons">–</b><span>neurons responded</span></div>
+      <div><b id="s-spikes">–</b><span>spikes</span></div>
+      <div><b id="s-dn">–</b><span>descending spikes</span></div>
+      <div><b id="s-time">–</b><span>brain time</span></div>
+    </div>
+  </section>
+
+  <section class="panel readout-panel">
+    <div class="panel-head"><h2>Readout <span class="muted">what the spikes say</span></h2></div>
+    <ul class="cands" id="cands"><li class="empty">Candidate moves appear here after the fly thinks.</li></ul>
+    <div class="classes" id="classes"></div>
+    <details class="about">
+      <summary>How this works</summary>
+      <p>The position is projected onto the fly's visual projection neurons: each piece type uses dedicated lobula columnar cell types, your pieces go to one eye and the fly's to the other, and each square is a retinotopic patch. The complete FlyWire v783 connectome then runs for 150&nbsp;ms as a leaky integrate-and-fire network with the parameters of Shiu et&nbsp;al.&nbsp;2024. A linear readout trained on Stockfish moves turns the resulting spike counts into a move. Nothing in the brain was changed; only the readout learned.</p>
+      <p class="muted" id="enc-info"></p>
+    </details>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+  import { createFlyScene } from "/static/fly3d.js";
+  window.flySceneReady = createFlyScene(document.getElementById("brain3d"))
+    .then(s => { document.getElementById("brain-loading").remove(); return s; })
+    .catch(e => { document.getElementById("brain-loading").textContent = "3D view failed: " + e.message; throw e; });
+</script>
+<script src="/static/app.js"></script>
+</body>
+</html>
